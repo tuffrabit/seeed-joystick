@@ -72,6 +72,7 @@ kbMode.setXStartOffset(config.kbModeOffsets['x'])
 kbMode.setYStartOffset(config.kbModeOffsets['y'])
 kbMode.setYConeEnd(config.kbModeYConeEnd)
 kbMode.setKeyboard(keyboard)
+led.setExtraLed(board.D10)
 startup.setLed(led)
 
 # Create some buttons. The physical buttons are connected
