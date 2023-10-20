@@ -6,13 +6,14 @@ class Led:
         self.mainLedPin = digitalio.DigitalInOut(board.LED)
         self.mainLedPin.direction = digitalio.Direction.OUTPUT
         self.extraLedPin = None
+        self.rgbLed = None
 
     def setExtraLed(self, pin):
-        self.extraLedPin = pin
-        self.extraLedPin.Direction = digitalio.Direction.OUTPUT
+        self.extraLedPin = digitalio.DigitalInOut(pin)
+        self.extraLedPin.direction = digitalio.Direction.OUTPUT
 
     def setLedState(self, state):
-        self.mainLedPin.value = not state
+        self.mainLedPin.value = state
 
         if self.extraLedPin != None:
-            self.extraLedPin.value = not state
+            self.extraLedPin.value = state

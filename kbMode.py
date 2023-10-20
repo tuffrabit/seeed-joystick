@@ -1,7 +1,10 @@
+import stickCommon as sc
+
 class KbMode:
     def __init__(self):
         self.xStartOffset = None
         self.yStartOffset = None
+        self.yConeEnd = None
         self.keyboard = None
 
     def setXStartOffset(self, value):
@@ -10,25 +13,38 @@ class KbMode:
     def setYStartOffset(self, value):
         self.yStartOffset = value
 
+    def setYConeEnd(self, value):
+        self.yConeEnd = value
+
     def setKeyboard(self, keyboard):
         self.keyboard = keyboard
 
     def calculateStickInput(self, stickValues):
-        pressedValues = [False, False, False, False]
+        up = False
+        down = False
+        left = False
+        right = False
         xStick = stickValues[0]
         yStick = stickValues[1]
+        xStickAbs = abs(xStick)
+        yStickAbs = abs(yStick)
 
-        if xStick > self.xStartOffset:
-            pressedValues[3] = True
-        elif xStick < (self.xStartOffset * -1):
-            pressedValues[2] = True
+        if xStickAbs > self.xStartOffset:
+            extraOffset = sc.rangeMap(yStickAbs, 0, 127, self.xStartOffset, self.yConeEnd)
 
-        if yStick > self.yStartOffset:
-            pressedValues[0] = True
-        elif yStick < (self.yStartOffset * -1):
-            pressedValues[1] = True
+            if xStickAbs > extraOffset:
+                if xStick > 0:
+                    right = True
+                elif xStick < 0:
+                    left = True
 
-        return pressedValues
+        if yStickAbs > self.yStartOffset:
+            if yStick > 0:
+                down = True
+            elif yStick < 0:
+                up = True
+
+        return up, down, left, right
 
     def handleKeyboundModeKey(self, key, isPressed):
         if isPressed:
